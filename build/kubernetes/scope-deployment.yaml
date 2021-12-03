@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert
+    kompose.version: 1.24.0 (4a2a0458)
+    works.weave.role: system
+  creationTimestamp: null
+  labels:
+    io.kompose.service: scope
+  name: scope
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: scope
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert
+        kompose.version: 1.24.0 (4a2a0458)
+        works.weave.role: system
+      creationTimestamp: null
+      labels:
+        io.kompose.network/backend: "true"
+        io.kompose.service: scope
+    spec:
+      containers:
+        - args:
+            - --probe.docker
+            - "true"
+          image: weaveworks/scope:1.13.1
+          name: weave-scope
+          ports:
+            - containerPort: 4040
+          resources: {}
+          securityContext:
+            privileged: true
+          volumeMounts:
+            - mountPath: /var/run/docker.sock
+              name: scope-claim0
+      hostname: weave-scope
+      restartPolicy: Always
+      volumes:
+        - name: scope-claim0
+          persistentVolumeClaim:
+            claimName: scope-claim0
+status: {}

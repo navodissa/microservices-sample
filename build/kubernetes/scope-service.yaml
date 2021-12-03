@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    kompose.cmd: kompose convert
+    kompose.version: 1.24.0 (4a2a0458)
+    works.weave.role: system
+  creationTimestamp: null
+  labels:
+    io.kompose.service: scope
+  name: scope
+spec:
+  ports:
+    - name: 4040-tcp
+      port: 4040
+      targetPort: 4040
+  selector:
+    io.kompose.service: scope
+status:
+  loadBalancer: {}
